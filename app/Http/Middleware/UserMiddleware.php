@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Auth;
 
-class AdminMiddleware
+class UserMiddleware
 {
     public function handle(Request $request, Closure $next): Response
     {
-        // Check if the authenticated user is an admin
-        if (Auth::check() && Auth::user()->isAdmin()) {
+        // Check if the authenticated user is a regular user
+        if (Auth::check() && Auth::user()->isUser()) {
             return $next($request);
         }
-        // Redirect or perform some other action for non-admin users
+
+        // Redirect or perform some other action for non-user roles
         return redirect('/');
     }
 }
