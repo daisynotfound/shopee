@@ -4,26 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Models\Produk;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
-
-class HomeController extends Controller
+class ProdukController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-    
-    public function index(): View {
-        $produks = Produk::all();
-        return view('home', ['produks' => $produks]);
-    }
-    
-    public function adminHome(): View {
+    // Menampilkan semua produk
+    public function index() {
         $produks = Produk::all();
         return view('adminHome', ['produks' => $produks]);
     }
 
+    public function create() {
+        return view('produk.create');
+    }
+    
+    // Menyimpan produk baru
     public function store(Request $request) {
         // Validasi input
         $request->validate([
@@ -67,9 +61,12 @@ class HomeController extends Controller
     // Menghapus produk
     public function destroy($id) {
         $produk = Produk::find($id);
+        
+        if (!$produk) {
+            return redirect()->route('adminHome')->with('error', 'Produk tidak ditemukan');
+        }
+    
         $produk->delete();
-
-        // Redirect setelah produk berhasil dihapus
         return redirect()->route('adminHome')->with('success', 'Produk berhasil dihapus');
     }
 }

@@ -2,44 +2,29 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail; 
-use Illuminate\Database\Eloquent\Factories\HasFactory; 
-use Illuminate\Foundation\Auth\User as Authenticatable; 
-use Illuminate\Notifications\Notifiable; 
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'type'
+        'type',  // Pastikan kolom 'type' ada
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected function casts(): array
+    // Pastikan akses role atau type diatur dengan benar
+    public function isAdmin()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->type === 'admin';  // Contoh cara memeriksa apakah user adalah admin
     }
 
-    protected function type(): Attribute {
-        return new Attribute(
-            get: fn($value) => [
-                "user",
-                "admin"
-                ][$value]
-            );
+    public function isUser()
+    {
+        return $this->type === 'user';  // Contoh cara memeriksa apakah user adalah regular user
     }
 }

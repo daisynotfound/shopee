@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Produk extends Model
+{
+    public function produk() {
+        return $this->belongsTo('Produk::class');
+    }
+
+    protected $fillable = ['kode_produk', 'nama', 'harga'];
+}

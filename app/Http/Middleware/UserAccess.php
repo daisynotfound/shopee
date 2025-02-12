@@ -14,15 +14,17 @@ class UserAccess
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
+     * @param  int  $roleType
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next, $userType): Response
+    public function handle(Request $request, Closure $next, $roleType): Response
     {
-        if (Auth::user()->type == $userType) {
+        if (Auth::check() && Auth::user()->role === (int) $roleType) {
             return $next($request);
         }
 
-        return response()->json(['You do not have permission to access for this page.']);
-        /* return response()->view('errors.check-permission'); */
+        return response()->json(['error' => 'You do not have permission to access this page.'], 403);
+        // Optionally, you can return a custom error view:
+        // return response()->view('errors.check-permission');
     }
 }
