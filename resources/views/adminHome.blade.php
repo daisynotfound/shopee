@@ -9,12 +9,16 @@
 
                 <div class="card-body">
                     <a href="{{ route('produk.create') }}" class="btn btn-sm btn-primary mb-3">Tambah Produk</a>
+                    <a href="{{ route('kategori.create') }}" class="btn btn-sm btn-secondary mb-3">Tambahkan Kategori</a>
+                    <a href="{{ route('transaksi.transaksiManager') }}" class="btn btn-sm btn-success mb-3">Konfirmasi Pesanan Produk</a>
+
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>Kode Produk</th>
                                 <th>Nama</th>
                                 <th>Harga</th>
+                                <th>Kategori</th> <!-- Kolom Kategori ditambahkan -->
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -24,6 +28,7 @@
                                 <td>{{ $produk->kode_produk }}</td>
                                 <td>{{ $produk->nama }}</td>
                                 <td>{{ $produk->harga }}</td>
+                                <td>{{ $produk->kategori ? $produk->kategori->nama_kategori : '-' }}</td> <!-- Menampilkan kategori atau '-' jika tidak ada -->
                                 <td>
                                     <a href="{{ route('produk.edit', $produk->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                     <form action="{{ route('produk.destroy', $produk->id) }}" method="POST" class="delete-form" style="display: inline;">

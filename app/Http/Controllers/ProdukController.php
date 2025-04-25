@@ -3,18 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Produk;
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
-    // Menampilkan semua produk
+    // Menampilkan semua produk beserta kategori
     public function index() {
-        $produks = Produk::all();
+        $produks = Produk::with('kategori')->get(); // Ambil produk beserta kategori
         return view('adminHome', ['produks' => $produks]);
     }
 
     public function create() {
-        return view('produk.create');
+        $kategoris = Kategori::all(); // Ambil semua kategori
+        return view('produk.create', compact('kategoris'));
     }
     
     // Menyimpan produk baru
@@ -23,7 +25,8 @@ class ProdukController extends Controller
         $request->validate([
             'kode_produk' => 'required|unique:produks', // Sesuaikan dengan nama tabel
             'nama' => 'required',
-            'harga' => 'required'
+            'harga' => 'required',
+            'kategori_id' => 'required|exists:kategoris,id', // Pastikan kategori_id ada di tabel kategoris
         ]);
 
         // Menyimpan data produk
@@ -36,9 +39,8 @@ class ProdukController extends Controller
     // Menampilkan form untuk edit produk
     public function edit($id) {
         $produk = Produk::find($id);
-
-        // Pastikan menggunakan 'produk' untuk variabel yang akan dikirim
-        return view('produk.edit', compact('produk'));
+        $kategoris = Kategori::all(); // Ambil semua kategori
+        return view('produk.edit', compact('produk', 'kategoris'));
     }
 
     // Memperbaharui data produk
@@ -46,8 +48,9 @@ class ProdukController extends Controller
         // Validasi input
         $request->validate([
             'kode_produk' => 'required',
-            'nama' => 'required', // Perbaiki typo 'reqiured'
-            'harga' => 'required'
+            'nama' => 'required',
+            'harga' => 'required',
+            'kategori_id' => 'required|exists:kategoris,id', // Pastikan kategori_id ada di tabel kategoris
         ]);
 
         // Mencari produk berdasarkan ID dan memperbaharui
