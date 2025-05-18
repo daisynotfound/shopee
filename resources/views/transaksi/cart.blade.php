@@ -3,12 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between">
-                    <div>{{ __('Data Tiket') }}</div>
-                    <div><a href="{{ route('home') }}" style="text-decoration: none;">{{ __('Beranda') }}</a></div>
-                    <div><a href="{{ route('transaksi.transaksi') }}" style="text-decoration: none;">{{ __('Bayar Tiket') }}</a></div>
+        <div class="col-md-10">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="h5 mb-0">{{ __('Data Tiket') }}</span>
+                    <div>
+                        <a href="{{ route('home') }}" class="btn btn-outline-primary btn-sm me-2">{{ __('Beranda') }}</a>
+                        <a href="{{ route('transaksi.transaksi') }}" class="btn btn-outline-success btn-sm">{{ __('Bayar Tiket') }}</a>
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -16,8 +18,8 @@
                         <div class="alert alert-success">{{ session('success') }}</div>
                     @endif
 
-                    <table class="table">
-                        <thead>
+                    <table class="table table-striped table-bordered">
+                        <thead class="table-light">
                             <tr>
                                 <th>Kode Produk</th>
                                 <th>Nama Pembeli</th>
@@ -32,19 +34,19 @@
                                 <tr>
                                     <td>{{ $cart->kode_produk }}</td>
                                     <td>{{ $cart->nama_user }}</td>
-                                    <td>{{ $cart->harga }}</td>
+                                    <td>{{ number_format($cart->harga, 0, ',', '.') }}</td>
                                     <td style="color: {{ $cart->status == 'Selesai' ? 'green' : ($cart->status == 'Pending' ? 'red' : 'black') }};">
                                         {{ $cart->status }}
                                     </td>
-                                    <td>{{ $cart->created_at }}</td>
+                                    <td>{{ $cart->created_at->format('d M Y H:i') }}</td>
                                     
                                     {{-- Tombol Beranda --}}
-                                    <td>
+                                    <td class="text-center">
                                         <a href="{{ route('home') }}" class="btn btn-sm btn-primary">Beranda</a>
                                     </td>
 
                                     {{-- Tombol Bayar --}}
-                                    <td>
+                                    <td class="text-center">
                                         <form action="{{ route('transaksi.bayar') }}" method="POST">
                                             @csrf
                                             <input type="hidden" name="cart_id" value="{{ $cart->id }}">
@@ -53,21 +55,20 @@
                                     </td>
 
                                     {{-- Tombol Batal atau Cetak --}}
-                                    <td>
+                                    <td class="text-center">
                                         @if($cart->status == 'Pending')
                                             <form action="{{ route('transaksi.clearcart', $cart->id) }}" method="POST" class="form-batal">
                                                 @csrf
-                                                <button type="submit" class="btn btn-sm btn-danger me-0">Batal</button>
+                                                <button type="submit" class="btn btn-sm btn-danger">Batal</button>
                                             </form>
                                         @elseif($cart->status == 'Selesai')
-                                            <a href="{{ route('transaksi.cetak', $cart->id) }}" target="_blank" class="btn btn-sm btn-success me-0">Cetak</a>
+                                            <a href="{{ route('transaksi.cetak', $cart->id) }}" target="_blank" class="btn btn-sm btn-success">Cetak</a>
                                         @endif
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>

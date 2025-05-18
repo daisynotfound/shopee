@@ -9,6 +9,7 @@ use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\ProdukController;
 use App\Models\Kategori;
 use App\Http\Controllers\KategoriController;
+use App\Models\Transaksi;
 use Illuminate\Support\Facades\Auth;
 
 // Auth Routes
@@ -41,10 +42,11 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/admin/home', [ProdukController::class, 'index'])->name('adminHome');
 Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.create');
 Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
-Route::get('/produk/{id}', [ProdukController::class, 'index'])->name('produk.show');
+Route::get('/produk/show/{id}', [ProdukController::class, 'show'])->name('produk.show');
 Route::get('/produk/{id}/edit', [ProdukController::class, 'edit'])->name('produk.edit');
 Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
 Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
+Route::get('/produk', [ProdukController::class, 'index'])->name('produk.index');
 
 Route::post('/beli', [PembelianController::class, 'beli'])->name('beli');
 Route::post('/bayar', [PembelianController::class, 'bayar'])->name('transaksi.bayar');
@@ -64,6 +66,11 @@ Route::get('/transaksi/transaksiManager', [PembelianController::class,'transaksi
 // Alternatif route jika dibutuhkan
 Route::get('/transaksi2', [PembelianController::class, 'transaksiIndex']);
 Route::resource('kategori', KategoriController::class);
+
+
+
+Route::get('/game/{kode_produk}', [PembelianController::class, 'playGame'])->name('transaksi.playGame');
+
 
 
 

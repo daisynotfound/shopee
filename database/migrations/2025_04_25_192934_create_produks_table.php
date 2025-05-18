@@ -10,6 +10,8 @@ return new class extends Migration {
             $table->id();
             $table->string('kode_produk')->unique();
             $table->string('nama');
+            $table->string('gambar')->nullable(); // Kolom gambar
+            $table->string('game_file')->nullable(); // ✅ Kolom file game
             $table->string('harga');
             $table->unsignedBigInteger('kategori_id');
             $table->timestamps();

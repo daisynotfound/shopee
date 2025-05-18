@@ -10,7 +10,12 @@ class Produk extends Model
     use HasFactory;
 
     protected $fillable = [
-        'kode_produk', 'nama', 'harga', 'kategori_id'
+        'kode_produk',
+        'nama',
+        'gambar',       // ✅ Gambar produk
+        'game_file',    // ✅ File game
+        'harga',
+        'kategori_id'
     ];
 
     // Relasi ke model Kategori

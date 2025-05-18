@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('kode_produk');
             $table->string('nama_user');
             $table->string('harga');
+            $table->string('kategori')->nullable(); // ✅ Tambahkan kolom kategori
+            $table->string('game_file')->nullable(); // ✅ Tambahkan kolom game_file
             $table->string('status');
             $table->timestamps();
 
