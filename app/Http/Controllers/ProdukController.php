@@ -21,7 +21,7 @@ class ProdukController extends Controller
         $kategoris = Kategori::all();
         return view('produk.create', compact('kategoris'));
     }
-    
+
     // Menyimpan produk baru
     public function store(Request $request) {
         $request->validate([
@@ -93,7 +93,7 @@ class ProdukController extends Controller
 
     public function destroy($id) {
         $produk = Produk::find($id);
-        
+
         if (!$produk) {
             return redirect()->route('adminHome')->with('error', 'Produk tidak ditemukan');
         }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -69,8 +69,7 @@ Route::resource('kategori', KategoriController::class);
 
 
 
-Route::get('/game/{kode_produk}', [PembelianController::class, 'playGame'])->name('transaksi.playGame');
-
-
-
+Route::get('/game/{kode_produk}', [PembelianController::class, 'playGame'])->name('transaksi.play');
+// Route::get('/produk/{id}/download', [ProdukController::class, 'downloadGameFile'])->name('produk.download');
+Route::get('/produk/{kode_produk}/download', [PembelianController::class, 'downloadGame'])->name('transaksi.downloadGame');
 

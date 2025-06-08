@@ -155,3 +155,5 @@ class ProdukSeeder extends Seeder
         ]);
     }
 }
+
+

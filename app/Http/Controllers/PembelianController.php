@@ -19,53 +19,53 @@ class PembelianController extends Controller
 {
     // Fungsi untuk mengekstrak file ZIP game
     public function playGame($kode_produk)
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    $transaksi = Transaksi::where('kode_produk', $kode_produk)
-        ->where('user_id', $user->id)
-        ->where('status', 'Selesai')
-        ->first();
+        $transaksi = Transaksi::where('kode_produk', $kode_produk)
+            ->where('user_id', $user->id)
+            ->where('status', 'Selesai')
+            ->first();
 
-    if (!$transaksi) {
-        return view('transaksi.play', ['error' => 'Transaksi tidak ditemukan atau status transaksi belum selesai.']);
-    }
-
-    if (!$transaksi->game_file) {
-        return view('transaksi.play', ['error' => 'File game tidak ditemukan.']);
-    }
-
-    $gameFolder = pathinfo($transaksi->game_file, PATHINFO_FILENAME);
-    $zipFilePath = storage_path('app/public/' . $transaksi->game_file);
-    $extractTo = storage_path('app/public/games/' . $gameFolder);
-
-    if (!File::exists($extractTo)) {
-        if (File::exists($zipFilePath)) {
-            $this->extractGameZip($zipFilePath, $extractTo);
-        } else {
-            return view('transaksi.play', ['error' => 'File ZIP tidak ditemukan.']);
+        if (!$transaksi) {
+            return view('transaksi.play', ['error' => 'Transaksi tidak ditemukan atau status transaksi belum selesai.']);
         }
+
+        if (!$transaksi->game_file) {
+            return view('transaksi.play', ['error' => 'File game tidak ditemukan.']);
+        }
+
+        $gameFolder = pathinfo($transaksi->game_file, PATHINFO_FILENAME);
+        $zipFilePath = storage_path('app/public/' . $transaksi->game_file);
+        $extractTo = storage_path('app/public/games/' . $gameFolder);
+
+        if (!File::exists($extractTo)) {
+            if (File::exists($zipFilePath)) {
+                $this->extractGameZip($zipFilePath, $extractTo);
+            } else {
+                return view('transaksi.play', ['error' => 'File ZIP tidak ditemukan.']);
+            }
+        }
+
+        $indexPath = $extractTo . '/index.html';
+        if (!file_exists($indexPath)) {
+            return view('transaksi.play', ['error' => 'File index.html game tidak ditemukan.']);
+        }
+
+        $gameUrl = asset('storage/games/' . $gameFolder . '/index.html');
+
+        return view('transaksi.play', compact('transaksi', 'gameUrl'));
     }
-
-    $indexPath = $extractTo . '/index.html';
-    if (!file_exists($indexPath)) {
-        return view('transaksi.play', ['error' => 'File index.html game tidak ditemukan.']);
-    }
-
-    $gameUrl = asset('storage/games/' . $gameFolder . '/index.html');
-
-    return view('transaksi.play', compact('transaksi', 'gameUrl'));
-}
 
 
     private function extractGameZip($zipFilePath, $extractTo)
-    {   
+    {
         $gamesBasePath = storage_path('app/public/games');
-        if(!File::exists($gamesBasePath)) {
+        if (!File::exists($gamesBasePath)) {
             File::makeDirectory($gamesBasePath, 0755, true);
         }
 
-        if(!File::exists($extractTo)) {
+        if (!File::exists($extractTo)) {
             File::makeDirectory($extractTo, 0755, true);
         }
 
@@ -76,18 +76,13 @@ class PembelianController extends Controller
 
             $files = File::files($extractTo);
             $dirs = File::directories($extractTo);
-            if(count($dirs) === 1 && count($files) === 0) {
+            if (count($dirs) === 1 && count($files) === 0) {
                 $inner = $dirs[0];
                 File::copyDirectory($inner, $extractTo);
                 File::deleteDirectory($inner);
             }
         }
     }
-
-
-    
-
-
 
     // Fungsi untuk cek approval transaksi
     public function checkApproval($kode_produk)
@@ -247,5 +242,30 @@ class PembelianController extends Controller
 
         $pdf = Pdf::loadView('transaksi.pdf', compact('transaksi'));
         return $pdf->download('transaksi-' . $transaksi->kode_produk . '.pdf');
+    }
+
+    public function downloadGame($kode_produk)
+    {
+        $produk = \App\Models\Produk::where('kode_produk', $kode_produk)->firstOrFail();
+
+        // Cek apakah user sudah bayar dan disetujui
+        $user = Auth::user();
+        $transaksi = \App\Models\Transaksi::where('user_id', $user->id)
+            ->where('kode_produk', $kode_produk)
+            ->where('status', 'selesai') // status yang disetujui admin
+            ->first();
+
+        if (!$transaksi) {
+            return redirect()->back()->with('error', 'Anda belum memiliki akses untuk mendownload game ini.');
+        }
+
+        // Pastikan file ada
+        $path = $produk->game_file;
+        if (!$path || !Storage::disk('public')->exists($path)) {
+            return redirect()->back()->with('error', 'File game tidak ditemukan.');
+        }
+
+        // Kirim file untuk diunduh
+        return response()->download(storage_path('app/public/' . $path));
     }
 }
