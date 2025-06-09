@@ -13,12 +13,25 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-    
-    public function index(): View {
-        $produks = Produk::all();
-        return view('home', ['produks' => $produks]);
+
+    public function index(Request $request): View
+{
+    $query = Produk::query();
+
+    // Cek apakah ada parameter 'search'
+    if ($request->has(`search`) && $request->search != '') {
+        $query->where('nama', 'like', '%' . $request->search . '%')
+              ->orWhere('kode_produk', 'like', '%' . $request->search . '%')
+              ->orWhereHas('kategori', function ($q) use ($request) {
+                  $q->where('nama_kategori', 'like', '%' . $request->search . '%');
+              });
     }
-    
+
+    $produks = $query->latest()->get();
+
+    return view('home', ['produks' => $produks]);
+}
+
     public function adminHome(): View {
         $produks = Produk::all();
         return view('adminHome', ['produks' => $produks]);
