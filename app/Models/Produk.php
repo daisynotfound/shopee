@@ -15,7 +15,8 @@ class Produk extends Model
         'gambar',       // ✅ Gambar produk
         'game_file',    // ✅ File game
         'harga',
-        'kategori_id'
+        'kategori_id',
+        'owner_id'
     ];
 
     // Relasi ke model Kategori

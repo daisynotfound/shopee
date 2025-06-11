@@ -6,10 +6,10 @@
         <div class="col-md-10">
             <div class="card shadow-sm">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <span class="h5 mb-0">{{ __('Data Tiket') }}</span>
+                    <span class="h5 mb-0">{{ __('Data Produk') }}</span>
                     <div>
                         <a href="{{ route('home') }}" class="btn btn-outline-primary btn-sm me-2">{{ __('Beranda') }}</a>
-                        <a href="{{ route('transaksi.transaksi') }}" class="btn btn-outline-success btn-sm">{{ __('Bayar Tiket') }}</a>
+                        <a href="{{ route('transaksi.transaksi') }}" class="btn btn-outline-success btn-sm">{{ __('Bayar Produk') }}</a>
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
                                         {{ $cart->status }}
                                     </td>
                                     <td>{{ $cart->created_at->format('d M Y H:i') }}</td>
-                                    
+
                                     {{-- Tombol Beranda --}}
                                     <td class="text-center">
                                         <a href="{{ route('home') }}" class="btn btn-sm btn-primary">Beranda</a>

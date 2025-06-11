@@ -69,7 +69,12 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a href="{{ route('adminHome') }}" class="btn btn-outline-secondary">← Kembali</a>
+                            @if(Auth::user()->type == 1)
+                                <a href="{{ route('adminHome') }}" class="btn btn-outline-secondary">← Kembali</a>
+                            @else
+                                <a href="{{ route('home') }}" class="btn btn-outline-secondary">← Kembali</a>
+                            @endif
+
                             <button type="submit" class="btn btn-success px-4">Simpan Produk</button>
                         </div>
                     </form>

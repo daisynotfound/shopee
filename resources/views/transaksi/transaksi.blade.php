@@ -9,7 +9,7 @@
                     <span class="h5 mb-0">{{ __('Data Produk') }}</span>
                     <div>
                         <a href="{{ route('home') }}" class="btn btn-outline-primary btn-sm me-2">{{ __('Beranda') }}</a>
-                        <a href="{{ route('transaksi.cart') }}" class="btn btn-outline-info btn-sm">{{ __('Cart Tiket') }}</a>
+                        <a href="{{ route('transaksi.cart') }}" class="btn btn-outline-info btn-sm">{{ __('Cart Produk') }}</a>
                     </div>
                 </div>
 
@@ -39,7 +39,7 @@
                                         {{ $transaksi->status }}
                                     </td>
                                     <td>{{ $transaksi->created_at->format('d M Y H:i') }}</td>
-                                    
+
                                     {{-- Tombol Aksi --}}
                                     <td class="text-center">
                                         <form action="{{ route('transaksi.clear', $transaksi->id) }}" method="POST">

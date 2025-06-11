@@ -19,7 +19,7 @@
                         <table class="table table-bordered table-hover align-middle">
                             <thead class="table-light">
                                 <tr class="text-center">
-                                    <th>Kode Tiket</th>
+                                    <th>Kode Produk</th>
                                     <th>Nama Pembeli</th>
                                     <th>Harga</th>
                                     <th>Status</th>
@@ -33,10 +33,10 @@
                                     <td class="text-center">{{ $transaksi->kode_produk }}</td>
                                     <td>{{ $transaksi->nama_user }}</td>
                                     <td>Rp {{ number_format($transaksi->harga, 0, ',', '.') }}</td>
-                                    <td class="fw-bold text-center" style="color: 
-                                        {{ 
-                                            $transaksi->status === 'Selesai' ? 'green' : 
-                                            ($transaksi->status === 'Pending' ? 'orange' : 'black') 
+                                    <td class="fw-bold text-center" style="color:
+                                        {{
+                                            $transaksi->status === 'Selesai' ? 'green' :
+                                            ($transaksi->status === 'Pending' ? 'orange' : 'black')
                                         }};">
                                         {{ $transaksi->status }}
                                     </td>

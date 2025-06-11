@@ -27,7 +27,7 @@
             border: none;
             border-radius: 0.5rem;
             width: 100%;
-            height: 480px; /* Lebih kecil dari sebelumnya */
+            height: 480px;
             max-width: 100%;
             display: block;
             margin-top: 1rem;
@@ -45,15 +45,28 @@
             text-align: center;
             padding: 3rem;
         }
+        .info-message {
+            color: #0d6efd;
+            font-weight: 500;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="game-container">
-        @if(isset($transaksi))
-            <h1>{{ $transaksi->nama_user }} - Mainkan Game</h1>
-            <iframe src="{{ $gameUrl }}" allowfullscreen></iframe>
-        @elseif(isset($error))
+        @if(isset($error))
             <div class="error-message">{{ $error }}</div>
+        @elseif(isset($gameUrl))
+            @if(isset($message))
+                <h1>Mainkan Game</h1>
+                <div class="info-message">{{ $message }}</div>
+            @elseif(isset($transaksi))
+                <h1>{{ $transaksi->nama_user }} - Mainkan Game</h1>
+            @endif
+
+            <iframe src="{{ $gameUrl }}" allowfullscreen></iframe>
         @else
             <div class="error-message">Transaksi tidak ditemukan atau belum selesai.</div>
         @endif
